@@ -1,0 +1,29 @@
+Non-Terminal,!=,%,&&,(,),*,+,+=,",",-,-=,/,;,<,<=,=,==,>,>=,diov,elihw,eslaf,esle,eurt,fed,fi,gnirts,id,id(,loob,naim,nruter,num,od,rof,string,taolf,tni,tnirp(,{,},$
+Args,,,,E ArgsTail,ε,,,,,,,,,,,,,,,Type E,,E ArgsTail,,E ArgsTail,,,Type E,E ArgsTail,E ArgsTail,Type E,Type E,,E ArgsTail,,,E ArgsTail,Type E,Type E,,,,
+ArgsTail,,,,,ε,,,,", E ArgsTail",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+B,ε,ε,ε,ε,ε,ε,ε,ε,ε,ε,ε,ε,ε,ε,ε,ε,ε,ε,ε,ε,ε,ε,,ε,ε,ε,ε,ε,ε,ε,ε,ε,ε,ε,ε,ε,ε,ε,ε,Block,ε,ε
+Block,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,{ Program },,
+DoWhileStmt,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,od Block elihw ( E ),,,,,,,,
+E,,,,T E',,,,,,,,,,,,,,,,,,T E',,T E',,,,T E',T E',,,,T E',,,T E',,,,,,
+E',,,,ε,ε,,+ T E',,ε,- T E',,,ε,,,,,,,ε,ε,ε,,ε,ε,ε,ε,ε,ε,ε,ε,ε,ε,ε,ε,ε,ε,ε,ε,,ε,ε
+ExprStmt,,,,E,,,,,,,,,,,,,,,,,,E,,E,,,,E,E,,,,E,,,E,,,,,,
+F,,,,( E ),,,,,,,,,,,,,,,,,,eslaf,,eurt,,,,id,id( Args ) B,,,,num,,,string,,,,,,
+ForStmt,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,rof ( OptExpr ; OptExpr ; OptExpr ) Block,,,,,,,
+FuncDecl,,,,,,,,,,,,,,,,,,,,,,,,,fed id ( Params ) { Program },,,,,,,,,,,,,,,,,
+G,,,,F G',,,,,,,,,,,,,,,,,,F G',,F G',,,,F G',F G',,,,F G',,,F G',,,,,,
+G',!= F G',% F G',&& F G',ε,ε,ε,ε,+= F G',ε,ε,-= F G',ε,ε,< F G',<= F G',= F G',== F G',> F G',>= F G',ε,ε,ε,,ε,ε,ε,ε,ε,ε,ε,ε,ε,ε,ε,ε,ε,ε,ε,ε,,ε,ε
+IfStmt,,,,,,,,,,,,,,,,,,,,,,,,,,fi ( E ) Block IfStmtail,,,,,,,,,,,,,,,,
+IfStmtail,,,,ε,,,,,,,,,,,,,,,,ε,ε,ε,esle Block,ε,ε,ε,ε,ε,ε,ε,ε,ε,ε,ε,ε,ε,ε,ε,ε,,ε,ε
+OptExpr,,,,E,ε,,,,,,,,ε,,,,,,,,,E,,E,,,,E,E,,,,E,,,E,,,,,,
+Param,,,,,,,,,,,,,,,,,,,,,,,,,,,,id,,,,,,,,,,,,,,
+Params,,,,,ε,,,,,,,,,,,,,,,,,,,,,,,Param ParamsTail,,,,,,,,,,,,,,
+ParamsTail,,,,,ε,,,,", Param ParamsTail",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+PrintStmt,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,tnirp( Args ),,,
+Program,,,,Stmt Program,,,,,,,,,,,,,,,,Stmt Program,Stmt Program,Stmt Program,,Stmt Program,Stmt Program,Stmt Program,Stmt Program,Stmt Program,Stmt Program,Stmt Program,Stmt Program,Stmt Program,Stmt Program,Stmt Program,Stmt Program,Stmt Program,Stmt Program,Stmt Program,Stmt Program,,ε,ε
+ReturnStmt,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,nruter E,,,,,,,,,,
+Stmt,,,,ExprStmt,,,,,,,,,,,,,,,,VarDecl,WhileStmt,ExprStmt,,ExprStmt,FuncDecl,IfStmt,VarDecl,ExprStmt,ExprStmt,VarDecl,VarDecl,ReturnStmt,ExprStmt,DoWhileStmt,ForStmt,ExprStmt,VarDecl,VarDecl,PrintStmt,,,
+T,,,,G T',,,,,,,,,,,,,,,,,,G T',,G T',,,,G T',G T',,,,G T',,,G T',,,,,,
+T',,,,ε,ε,* G T',ε,,ε,ε,,/ G T',ε,,,,,,,ε,ε,ε,,ε,ε,ε,ε,ε,ε,ε,ε,ε,ε,ε,ε,ε,ε,ε,ε,,ε,ε
+Type,,,,,,,,,,,,,,,,,,,,diov,,,,,,,gnirts,,,loob,naim,,,,,,taolf,tni,,,,
+VarDecl,,,,,,,,,,,,,,,,,,,,Type E,,,,,,,Type E,,,Type E,Type E,,,,,,Type E,Type E,,,,
+WhileStmt,,,,,,,,,,,,,,,,,,,,,elihw ( E ) Block,,,,,,,,,,,,,,,,,,,,,

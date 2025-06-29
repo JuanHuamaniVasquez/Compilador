@@ -1,0 +1,288 @@
+NonTerminal,Terminal,Production
+Args,(,E ArgsTail
+Args,),
+Args,diov,Type E
+Args,eslaf,E ArgsTail
+Args,eurt,E ArgsTail
+Args,gnirts,Type E
+Args,id,E ArgsTail
+Args,id(,E ArgsTail
+Args,loob,Type E
+Args,naim,Type E
+Args,num,E ArgsTail
+Args,string,E ArgsTail
+Args,taolf,Type E
+Args,tni,Type E
+ArgsTail,),
+ArgsTail,",",", E ArgsTail"
+B,!=,
+B,%,
+B,&&,
+B,(,
+B,),
+B,*,
+B,+,
+B,+=,
+B,",",
+B,-,
+B,-=,
+B,/,
+B,;,
+B,<,
+B,<=,
+B,=,
+B,==,
+B,>,
+B,>=,
+B,diov,
+B,elihw,
+B,eslaf,
+B,eurt,
+B,fed,
+B,fi,
+B,gnirts,
+B,id,
+B,id(,
+B,loob,
+B,naim,
+B,nruter,
+B,num,
+B,od,
+B,rof,
+B,string,
+B,taolf,
+B,tni,
+B,tnirp(,
+B,{,Block
+B,},
+B,$,
+Block,{,{ Program }
+DoWhileStmt,od,od Block elihw ( E )
+E,(,T E'
+E,eslaf,T E'
+E,eurt,T E'
+E,id,T E'
+E,id(,T E'
+E,num,T E'
+E,string,T E'
+E',(,
+E',),
+E',+,+ T E'
+E',",",
+E',-,- T E'
+E',;,
+E',diov,
+E',elihw,
+E',eslaf,
+E',eurt,
+E',fed,
+E',fi,
+E',gnirts,
+E',id,
+E',id(,
+E',loob,
+E',naim,
+E',nruter,
+E',num,
+E',od,
+E',rof,
+E',string,
+E',taolf,
+E',tni,
+E',tnirp(,
+E',},
+E',$,
+ExprStmt,(,E
+ExprStmt,eslaf,E
+ExprStmt,eurt,E
+ExprStmt,id,E
+ExprStmt,id(,E
+ExprStmt,num,E
+ExprStmt,string,E
+F,(,( E )
+F,eslaf,eslaf
+F,eurt,eurt
+F,id,id
+F,id(,id( Args ) B
+F,num,num
+F,string,string
+ForStmt,rof,rof ( OptExpr ; OptExpr ; OptExpr ) Block
+FuncDecl,fed,fed id ( Params ) { Program }
+G,(,F G'
+G,eslaf,F G'
+G,eurt,F G'
+G,id,F G'
+G,id(,F G'
+G,num,F G'
+G,string,F G'
+G',!=,!= F G'
+G',%,% F G'
+G',&&,&& F G'
+G',(,
+G',),
+G',*,
+G',+,
+G',+=,+= F G'
+G',",",
+G',-,
+G',-=,-= F G'
+G',/,
+G',;,
+G',<,< F G'
+G',<=,<= F G'
+G',=,= F G'
+G',==,== F G'
+G',>,> F G'
+G',>=,>= F G'
+G',diov,
+G',elihw,
+G',eslaf,
+G',eurt,
+G',fed,
+G',fi,
+G',gnirts,
+G',id,
+G',id(,
+G',loob,
+G',naim,
+G',nruter,
+G',num,
+G',od,
+G',rof,
+G',string,
+G',taolf,
+G',tni,
+G',tnirp(,
+G',},
+G',$,
+IfStmt,fi,fi ( E ) Block IfStmtail
+IfStmtail,(,
+IfStmtail,diov,
+IfStmtail,elihw,
+IfStmtail,eslaf,
+IfStmtail,esle,esle Block
+IfStmtail,eurt,
+IfStmtail,fed,
+IfStmtail,fi,
+IfStmtail,gnirts,
+IfStmtail,id,
+IfStmtail,id(,
+IfStmtail,loob,
+IfStmtail,naim,
+IfStmtail,nruter,
+IfStmtail,num,
+IfStmtail,od,
+IfStmtail,rof,
+IfStmtail,string,
+IfStmtail,taolf,
+IfStmtail,tni,
+IfStmtail,tnirp(,
+IfStmtail,},
+IfStmtail,$,
+OptExpr,(,E
+OptExpr,),
+OptExpr,;,
+OptExpr,eslaf,E
+OptExpr,eurt,E
+OptExpr,id,E
+OptExpr,id(,E
+OptExpr,num,E
+OptExpr,string,E
+Param,id,id
+Params,),
+Params,id,Param ParamsTail
+ParamsTail,),
+ParamsTail,",",", Param ParamsTail"
+PrintStmt,tnirp(,tnirp( Args )
+Program,(,Stmt Program
+Program,diov,Stmt Program
+Program,elihw,Stmt Program
+Program,eslaf,Stmt Program
+Program,eurt,Stmt Program
+Program,fed,Stmt Program
+Program,fi,Stmt Program
+Program,gnirts,Stmt Program
+Program,id,Stmt Program
+Program,id(,Stmt Program
+Program,loob,Stmt Program
+Program,naim,Stmt Program
+Program,nruter,Stmt Program
+Program,num,Stmt Program
+Program,od,Stmt Program
+Program,rof,Stmt Program
+Program,string,Stmt Program
+Program,taolf,Stmt Program
+Program,tni,Stmt Program
+Program,tnirp(,Stmt Program
+Program,},
+Program,$,
+ReturnStmt,nruter,nruter E
+Stmt,(,ExprStmt
+Stmt,diov,VarDecl
+Stmt,elihw,WhileStmt
+Stmt,eslaf,ExprStmt
+Stmt,eurt,ExprStmt
+Stmt,fed,FuncDecl
+Stmt,fi,IfStmt
+Stmt,gnirts,VarDecl
+Stmt,id,ExprStmt
+Stmt,id(,ExprStmt
+Stmt,loob,VarDecl
+Stmt,naim,VarDecl
+Stmt,nruter,ReturnStmt
+Stmt,num,ExprStmt
+Stmt,od,DoWhileStmt
+Stmt,rof,ForStmt
+Stmt,string,ExprStmt
+Stmt,taolf,VarDecl
+Stmt,tni,VarDecl
+Stmt,tnirp(,PrintStmt
+T,(,G T'
+T,eslaf,G T'
+T,eurt,G T'
+T,id,G T'
+T,id(,G T'
+T,num,G T'
+T,string,G T'
+T',(,
+T',),
+T',*,* G T'
+T',+,
+T',",",
+T',-,
+T',/,/ G T'
+T',;,
+T',diov,
+T',elihw,
+T',eslaf,
+T',eurt,
+T',fed,
+T',fi,
+T',gnirts,
+T',id,
+T',id(,
+T',loob,
+T',naim,
+T',nruter,
+T',num,
+T',od,
+T',rof,
+T',string,
+T',taolf,
+T',tni,
+T',tnirp(,
+T',},
+T',$,
+Type,diov,diov
+Type,gnirts,gnirts
+Type,loob,loob
+Type,naim,naim
+Type,taolf,taolf
+Type,tni,tni
+VarDecl,diov,Type E
+VarDecl,gnirts,Type E
+VarDecl,loob,Type E
+VarDecl,naim,Type E
+VarDecl,taolf,Type E
+VarDecl,tni,Type E
+WhileStmt,elihw,elihw ( E ) Block

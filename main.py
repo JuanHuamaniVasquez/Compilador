@@ -49,7 +49,12 @@ def main():
     root = predictive_parser(tokens_rapidos, csv_file="producciones.csv")
     # Arbol
     generar_arbol_graphviz(root)
-    
+    import pickle
+
+    # Guardar
+    with open("arbol.pkl", "wb") as f:
+        pickle.dump(root, f)
+
 
 if __name__ == "__main__":
     main()
