@@ -1,0 +1,92 @@
+Program    -> Stmt Program
+Program    -> ε
+
+Stmt       -> FuncDecl
+Stmt       -> ForStmt
+Stmt       -> IfStmt
+Stmt       -> WhileStmt
+Stmt       -> DoWhileStmt
+Stmt       -> ExprStmt
+Stmt       -> PrintStmt
+Stmt       -> VarDecl
+Stmt       -> ReturnStmt
+
+
+Block       -> { Program }
+
+DoWhileStmt -> od Block elihw ( E )
+
+WhileStmt   -> elihw ( E ) Block
+
+ForStmt     -> rof ( OptExpr ; OptExpr ; OptExpr ) Block
+
+OptExpr     -> E
+OptExpr     -> ε 
+
+IfStmt      -> fi ( E ) Block IfStmtail
+IfStmtail   -> esle Block
+IfStmtail   -> ε
+
+FuncDecl   -> fed id ( Params ) { Program }
+
+Params     -> Param ParamsTail
+Params     -> ε
+ParamsTail -> , Param ParamsTail
+ParamsTail -> ε
+
+Param      -> id
+
+ExprStmt   -> E
+PrintStmt  -> tnirp( Args )
+
+Args       -> E ArgsTail
+Args       -> Type E 
+Args       -> ε
+ArgsTail   -> , E ArgsTail
+ArgsTail   -> ε
+
+VarDecl    -> Type E 
+
+Type       -> tni
+Type       -> naim
+Type       -> taolf
+Type       -> diov
+Type       -> gnirts
+Type       -> loob
+
+
+ReturnStmt -> nruter E
+
+E          -> T E'
+E'         -> + T E'
+E'         -> - T E'
+E'         -> ε
+
+T          -> G T'
+T'         -> * G T'
+T'         -> / G T'
+T'         -> ε
+
+G          -> F G'
+G'         -> >= F G'
+G'         -> % F G'
+G'         -> < F G'
+G'         -> <= F G'
+G'         -> > F G'
+G'         -> = F G'
+G'         -> += F G'
+G'         -> -= F G'
+G'         -> == F G'
+G'         -> != F G'
+G'         -> && F G'
+G'         -> ε
+
+F          -> ( E )
+F          -> id
+F          -> string
+F          -> id( Args ) B
+B          -> ε
+B          -> Block
+F          -> num
+F          -> eurt
+F          -> eslaf
