@@ -16,15 +16,6 @@ from parser import (
 
 from lexer import tokenizar_frase,tokenizar_frase_sem
 
-from semantic import (
-    build_symbol_table,
-    verificar_variables_usadas,
-    check_duplicate_declarations,
-    limpiar_tabla_simbolos,
-    verificar_tipos_expresiones
-)
-
-
 
 def main():
     # Tokens
@@ -58,32 +49,7 @@ def main():
     root = predictive_parser(tokens_rapidos, csv_file="producciones.csv")
     # Arbol
     generar_arbol_graphviz(root)
-    tokens_sem = tokenizar_frase_sem(code)
-    tabla = build_symbol_table(tokens_sem)
-    #print(tokens_sem)
-    print("\nTABLA DE TODO LOS SIMBOLOS")
-    for entry in tabla:
-        print(f"Nombre: {entry['name']:<20}, Tipo: {entry['type']:<20}, Ámbito: {entry['scope']:<20}")
-
-    errores = verificar_variables_usadas(tokens_sem, tabla)
-
-    print("\nERRORES SEMÁNTICOS:")
-    for e in errores:
-        print(e)
-
-    errores = check_duplicate_declarations(tabla)
-    for e in errores:
-        print(e)
-    tabla = limpiar_tabla_simbolos(tabla,eliminar_locales=True)
-    print("\nTABLA DE SIMBOLOS DEPURADA")
-    for entry in tabla:
-        print(f"Nombre: {entry['name']:<20}, Tipo: {entry['type']:<20}, Ámbito: {entry['scope']:<20}")
-
-    errores_tipo = verificar_tipos_expresiones(tokens_sem, tabla)
-    print("\nERRORES DE TIPO")
-    for e in errores_tipo:
-        print(e)
-  
+    
 
 if __name__ == "__main__":
     main()
