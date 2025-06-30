@@ -4,7 +4,6 @@ tni niam() {
     tnirp("Hola, Mundo!")
     nruter 0
 }
-/*
 //  (2) Bucles anidados 
 tni niam() {
     tni i = 0
@@ -33,4 +32,3 @@ tni niam() {
     tnirp(resultado)
     nruter 0
 }
-*/
