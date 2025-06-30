@@ -114,7 +114,7 @@ def construir_tabla_simbolos(nodo, tabla, scope="global", visitados=None):
             else:
                 #print(f" Variable registrada: {nombre}, tipo: {tipo}, scope: {scope}")
                 tabla.append(Symbol(nombre, tipo, scope))
-
+                verificar_asignacion_var(hijo, tipo, nombre, tabla, scope)
     for hijo in nodo.children:
         construir_tabla_simbolos(hijo, tabla, scope, visitados)
 
@@ -213,6 +213,111 @@ def imprimir_tabla_simbolos(tabla, solo_global=False):
 #  INFERIR TIPOS
 # =======================
 
+def buscar_nodo(nodo, nombre):
+    if nodo.name == nombre:
+        return nodo
+    for hijo in nodo.children:
+        resultado = buscar_nodo(hijo, nombre)
+        if resultado:
+            return resultado
+    return None
+
+def es_asignacion_valida(tipo_var, tipo_expr):
+    if tipo_var == tipo_expr:
+        return True
+    if tipo_var == "taolf" and tipo_expr == "tni":
+        return True  # int puede ir a float
+    if tipo_var == "tni" and tipo_expr == "loob":
+        return True  # int puede ir a float
+    if tipo_var == "loob" and tipo_expr == "tni":
+        return True  # int puede ir a float
+    if tipo_var == "tni" and tipo_expr == "taolf":
+        return True  # float a int (simplificación)
+    return False
+
+def verificar_asignacion_var(nodo_vardecl, tipo_declarado, nombre_var, tabla, scope):
+    """
+    Verifica si hay una asignación en la declaración de variable
+    y valida el tipo de la expresión asignada.
+    """
+    e_nodo = buscar_nodo(nodo_vardecl, "E")
+    if not e_nodo:
+        return
+
+    # Buscar si dentro de E hay una asignación: G → F G' (donde G' tiene '=')
+    g_nodo = buscar_nodo(e_nodo, "G")
+    if not g_nodo:
+        return
+
+    for hijo in g_nodo.children:
+        if hijo.name == "G'" and len(hijo.children) >= 2:
+            operador = hijo.children[0].value
+            if operador == "=":
+                # ✅ La expresión completa cuelga del nodo E, no solo de F
+                tipo_expr = inferir_tipo(e_nodo, tabla, scope)
+                print(f"🔍 Tipo inferido para asignación a '{nombre_var}': {tipo_expr}")
+                if not es_asignacion_valida(tipo_declarado, tipo_expr):
+                    print(f"❌ Error: No se puede asignar '{tipo_expr}' a variable '{nombre_var}' de tipo '{tipo_declarado}'")
+                else:
+                    print(f"✅ Asignación válida para variable '{nombre_var}'")
+                break
+def inferir_tipo(nodo, tabla, scope):
+    if nodo is None:
+        return "desconocido"
+
+    if nodo.name == "num":
+        return "taolf" if "." in nodo.value else "tni"
+    elif nodo.name == "string":
+        return "gnirts"
+    elif nodo.name in {"eurt", "eslaf"}:
+        return "loob"
+    elif nodo.name == "id":
+        for s in reversed(tabla):
+            if s.name == nodo.value and (s.scope == scope or s.scope == "global"):
+                return s.tipo
+        return "indefinido"
+    
+    # Nodos vacíos
+    if nodo.name in {"E'", "T'", "G'"} and len(nodo.children) == 0:
+        return None  # No afecta el tipo
+    
+    if len(nodo.children) == 1:
+        return inferir_tipo(nodo.children[0], tabla, scope)
+
+    # Nodos con operadores
+    if nodo.name in {"E", "T", "G"}:
+        tipo_izq = inferir_tipo(nodo.children[0], tabla, scope)
+        tipo_der = inferir_tipo(nodo.children[1], tabla, scope)
+        return tipo_binario(tipo_izq, tipo_der)
+
+    if nodo.name in {"E'", "T'", "G'"}:
+        # Operación tipo: + T E'
+        if len(nodo.children) >= 3:
+            tipo_izq = inferir_tipo(nodo.children[1], tabla, scope)
+            tipo_der = inferir_tipo(nodo.children[2], tabla, scope)
+            resultado = tipo_binario(tipo_izq, tipo_der)
+            if resultado == "invalido":
+                print(f"⚠️  Tipo inválido entre '{tipo_izq}' y '{tipo_der}'")
+            return resultado
+        elif len(nodo.children) == 2:
+            return inferir_tipo(nodo.children[1], tabla, scope)
+        else:
+            return None  # G' sin efecto
+
+    return inferir_tipo(nodo.children[0], tabla, scope)
+
+def tipo_binario(t1, t2):
+    if t1 is None:
+        return t2
+    if t2 is None:
+        return t1
+    if "indefinido" in (t1, t2):
+        return "indefinido"
+    if t1 == t2:
+        return t1
+    if {t1, t2} <= {"tni", "taolf"}:
+        return "taolf"
+    return "invalido"
 
 
 # =======================
@@ -226,9 +331,9 @@ if __name__ == "__main__":
     construir_tabla_simbolos(raiz, tabla)
     guardar_tabla(tabla)
     print(f"\n Tabla de símbolos generada con {len(tabla)} símbolos.")
-    imprimir_tabla_simbolos(tabla, solo_global=False)
+    #imprimir_tabla_simbolos(tabla, solo_global=False)
     print("\n Verificando identificadores usados...")
     verificar_identificadores(raiz, tabla)
     verificar_redeclaraciones(tabla)
-    imprimir_tabla_simbolos(tabla, solo_global=True)
-
+    #imprimir_tabla_simbolos(tabla, solo_global=True)
+    #imprimir_arbol(raiz)

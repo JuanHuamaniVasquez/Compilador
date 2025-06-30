@@ -1,37 +1,9 @@
-tni x = "hola"        //  Error: No se puede asignar 'gnirts' a 'tni'
-tni y = 3 + "texto"   //  Error: Tipos incompatibles 'tni' y 'gnirts'
-taolf z = 2 + 3.1    //  OK, tipo inferido es taolf
-//  (1) Hola Mundo 
-
-tni niam() {
-    tnirp("Hola, Mundo!")
-    nruter 0
-}
-//  (2) Bucles anidados 
-tni niam() {
-    tni i = 0
-    elihw (i < 5) {
-        tni j = 0
-        elihw (j < 5) {
-            tnirp(i, " ", j)
-            j = j + 1
-        }
-        i = i + 1
-    }
-    nruter 0
-}
-
-
-//  (3) Recursividad (Factorial) 
-diov factorial(tni n) {
-    fi (n == 0) {
-        nruter 1
-    }
-    nruter n * factorial(n - 1)
-}
-
-tni niam() {
-    tni resultado = factorial(5)
-    tnirp(resultado)
-    nruter 0
-}
+taolf y = 1.50+03      // string no puede ir a float
+tni z = 1 * 2  // bool + string inválido
+gnirts s = "Hola"         // int a string no permitido
+tni w = 5-4         // bool + string inválido
+loob flag = eurt               // float a bool inválido
+tni r = 1 +2              // suma de strings no válida para int
+gnirts nombre = "eurt" + "ok"    // bool + string inválido
+loob q = eurt               // string no puede ser bool
+taolf m = 0.1             // string no puede ser float
