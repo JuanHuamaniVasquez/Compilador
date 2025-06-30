@@ -190,7 +190,8 @@ def tokenizar_frase(frase):
         elif tok.startswith('eurt') or tok.startswith("eslaf"):
             resultado.append((tok, tok)) 
         elif tok.startswith('"') or tok.startswith("'"):
-            resultado.append(('id', tok))  # o puedes usar otro tipo: string o char
+            tok = tok.replace('"','')
+            resultado.append(('string', tok))  # o puedes usar otro tipo: string o char
         elif tok.endswith('(') and re.match(r'^[a-zA-Z_][a-zA-Z0-9_]*\($', tok):
             nombre_funcion = tok[:-1]
             if nombre_funcion in reserved:
@@ -211,67 +212,3 @@ def tokenizar_frase(frase):
 
     return resultado
 
-'''print("\nTokens por tokenizar_frase:")
-tokens_rapidos = tokenizar_frase(code)
-print(tokens_rapidos)'''
-
-
-import re
-
-def tokenizar_frase_sem(frase):
-    frase = frase.replace("''", 'ε')
-    frase = re.sub(r'/\*.*?\*/', '', frase, flags=re.DOTALL)  # comentarios /* ... */
-    frase = re.sub(r'//.*', '', frase)  # comentarios //
-
-    patron = r"""
-        \"[^"\n]*\"         |   # strings dobles
-        \'[^'\n]*\'         |   # caracteres o strings simples
-        \+\+|--             |   # incrementos / decrementos
-        ==|!=|<=|>=         |   # comparaciones dobles
-        \+=|-=|\*=|/=       |   # asignaciones compuestas
-        &&|\|\|             |   # operadores lógicos dobles
-        \d+\.\d+            |   #  flotantes (antes del punto suelto)
-        \d+                 |   # enteros
-        \w+\(               |   # nombre de función + paréntesis
-        ->|\.               |   # acceso a puntero o miembro
-        [\(\){}\[\];,:]     |   # símbolos especiales
-        [<>!=+\-*/%]        |   # operadores simples
-        \w+                 |   # palabras
-        ε                   |   # epsilon
-        .                       # cualquier otro carácter
-    """
-
-    tokens = re.findall(patron, frase, flags=re.VERBOSE)
-
-    resultado = []
-    for tok in tokens:
-        tok = tok.strip()
-        if not tok:
-            continue
-        if tok == 'ε':
-            resultado.append(('ε', 'ε'))
-        elif tok in ['eurt', 'eslaf']:
-            resultado.append((tok, tok))
-        elif tok.startswith('"') or tok.startswith("'"):
-            resultado.append(('string', tok))
-        elif tok.endswith('(') and re.match(r'^[a-zA-Z_][a-zA-Z0-9_]*\($', tok):
-            nombre_funcion = tok[:-1]
-            if nombre_funcion in reserved:
-                resultado.append((nombre_funcion, nombre_funcion))
-                resultado.append(('(', '('))
-            else:
-                resultado.append(('id', nombre_funcion))
-                resultado.append(('(', '('))
-        elif re.match(r'^\d+\.\d+$', tok):  
-            resultado.append(('num', tok))  # float
-        elif tok.isdigit():
-            resultado.append(('num', tok))  # int
-        elif re.match(r'^[a-zA-Z_][a-zA-Z0-9_]*$', tok):
-            if tok in reserved:
-                resultado.append((tok, tok))
-            else:
-                resultado.append(('id', tok))
-        else:
-            resultado.append((tok, tok))
-
-    return resultado

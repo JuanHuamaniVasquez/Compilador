@@ -14,7 +14,7 @@ from parser import (
     generar_arbol_graphviz
 )
 
-from lexer import tokenizar_frase,tokenizar_frase_sem
+from lexer import tokenizar_frase
 
 
 def main():

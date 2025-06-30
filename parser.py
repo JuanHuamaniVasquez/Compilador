@@ -47,7 +47,7 @@ def predictive_parser(input_tokens, csv_file="producciones.csv"):
             break
         elif top in ['!=','"','$','%','&&','(',')','*','+','+=',',','-','-=','/',';','<','<=','=','==','>','>=',
                      'diov','elihw','eslaf','esle','eurt','fed','fi','id','id(','nruter','num','od','rof(','taolf',
-                     'tni','tnirp(','{','}','loob','gnirts']:
+                     'tni','tnirp(','{','}','loob','gnirts','string']:
             if top == current_token_type:
                 top_node.value = current_token_value  #  Guardar el valor del token
                 print("terminal")
@@ -99,7 +99,7 @@ def generar_arbol_graphviz(node, filename="arbol_sintactico"):
     dot_lines = ["digraph G {", "  node [fontname=Arial];"]
 
     # Lista de terminales
-    terminales = {'!=','"','$','%','&&','(',')','*','+','+=',',','-','-=','/',';','<','<=','=','==','>','>=','diov','gnirts','elihw','eslaf','loob','esle','eurt','fed','fi','id','id(','nruter','num','od','rof(','taolf','tni','tnirp(','{','}'}
+    terminales = {'!=','"','$','%','&&','(',')','*','+','+=',',','-','-=','/',';','<','<=','=','==','>','>=','string','diov','gnirts','elihw','eslaf','loob','esle','eurt','fed','fi','id','id(','nruter','num','od','rof(','taolf','tni','tnirp(','{','}'}
 
     def build_graph(node, parent_id=None):
         nonlocal node_counter
