@@ -231,6 +231,10 @@ def es_asignacion_valida(tipo_var, tipo_expr):
         return True  # int puede ir a float
     if tipo_var == "loob" and tipo_expr == "tni":
         return True  # int puede ir a float
+    if tipo_var == "taolf" and tipo_expr == "loob":
+        return True  # int puede ir a float
+    if tipo_var == "loob" and tipo_expr == "taolf":
+        return True  # int puede ir a float
     if tipo_var == "tni" and tipo_expr == "taolf":
         return True  # float a int (simplificación)
     return False
@@ -253,73 +257,81 @@ def verificar_asignacion_var(nodo_vardecl, tipo_declarado, nombre_var, tabla, sc
         if hijo.name == "G'" and len(hijo.children) >= 2:
             operador = hijo.children[0].value
             if operador == "=":
-                # ✅ La expresión completa cuelga del nodo E, no solo de F
+                #  La expresión completa cuelga del nodo E, no solo de F
                 tipo_expr = inferir_tipo(e_nodo, tabla, scope)
-                print(f"🔍 Tipo inferido para asignación a '{nombre_var}': {tipo_expr}")
+                #print(f" Tipo inferido para asignación a '{nombre_var}': {tipo_expr}")
                 if not es_asignacion_valida(tipo_declarado, tipo_expr):
-                    print(f"❌ Error: No se puede asignar '{tipo_expr}' a variable '{nombre_var}' de tipo '{tipo_declarado}'")
+                    print(f" ERROR: No se puede asignar '{tipo_expr}' a variable '{nombre_var}' de tipo '{tipo_declarado}'")
                 else:
-                    print(f"✅ Asignación válida para variable '{nombre_var}'")
+                    print(f" Asignación válida para variable '{nombre_var}'")
                 break
+
 def inferir_tipo(nodo, tabla, scope):
     if nodo is None:
         return "desconocido"
 
+    # Literales simples
     if nodo.name == "num":
         return "taolf" if "." in nodo.value else "tni"
     elif nodo.name == "string":
         return "gnirts"
     elif nodo.name in {"eurt", "eslaf"}:
-        return "loob"
+        return "taolf" if "." in nodo.value else "tni"
     elif nodo.name == "id":
         for s in reversed(tabla):
             if s.name == nodo.value and (s.scope == scope or s.scope == "global"):
                 return s.tipo
         return "indefinido"
-    
+
+
+
     # Nodos vacíos
     if nodo.name in {"E'", "T'", "G'"} and len(nodo.children) == 0:
-        return None  # No afecta el tipo
-    
+        return None
+
+    # Nodos recursivos simples
     if len(nodo.children) == 1:
         return inferir_tipo(nodo.children[0], tabla, scope)
 
-    # Nodos con operadores
+    # Nodos con operadores binarios
     if nodo.name in {"E", "T", "G"}:
+        if len(nodo.children) == 1:
+            return inferir_tipo(nodo.children[0], tabla, scope)
         tipo_izq = inferir_tipo(nodo.children[0], tabla, scope)
         tipo_der = inferir_tipo(nodo.children[1], tabla, scope)
         return tipo_binario(tipo_izq, tipo_der)
 
+    # Nodos E', T', G' con operador y operandos
     if nodo.name in {"E'", "T'", "G'"}:
-        # Operación tipo: + T E'
         if len(nodo.children) >= 3:
             tipo_izq = inferir_tipo(nodo.children[1], tabla, scope)
             tipo_der = inferir_tipo(nodo.children[2], tabla, scope)
             resultado = tipo_binario(tipo_izq, tipo_der)
-            if resultado == "invalido":
-                print(f"⚠️  Tipo inválido entre '{tipo_izq}' y '{tipo_der}'")
             return resultado
         elif len(nodo.children) == 2:
             return inferir_tipo(nodo.children[1], tabla, scope)
         else:
-            return None  # G' sin efecto
+            return None
 
+    # Fallback
     return inferir_tipo(nodo.children[0], tabla, scope)
 
 def tipo_binario(t1, t2):
     if t1 is None:
         return t2
-    if t2 is None:
+    if t2 is None: 
         return t1
+    if (t1 and t2) in {"eurt","eslaf","tni","taolf"}:
+        return "tni"
     if "indefinido" in (t1, t2):
         return "indefinido"
     if t1 == t2:
         return t1
     if {t1, t2} <= {"tni", "taolf"}:
         return "taolf"
+    # Aquí se informa el error
+    print(f"    Tipo inválido entre '{t1}' y '{t2}'")
     return "invalido"
-
-
 # =======================
 #  Main
 # =======================
