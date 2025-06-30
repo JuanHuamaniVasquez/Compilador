@@ -1,3 +1,37 @@
 tni x = "hola"        //  Error: No se puede asignar 'gnirts' a 'tni'
 tni y = 3 + "texto"   //  Error: Tipos incompatibles 'tni' y 'gnirts'
 taolf z = 2 + 3.1    //  OK, tipo inferido es taolf
+//  (1) Hola Mundo 
+
+tni niam() {
+    tnirp("Hola, Mundo!")
+    nruter 0
+}
+//  (2) Bucles anidados 
+tni niam() {
+    tni i = 0
+    elihw (i < 5) {
+        tni j = 0
+        elihw (j < 5) {
+            tnirp(i, " ", j)
+            j = j + 1
+        }
+        i = i + 1
+    }
+    nruter 0
+}
+
+
+//  (3) Recursividad (Factorial) 
+diov factorial(tni n) {
+    fi (n == 0) {
+        nruter 1
+    }
+    nruter n * factorial(n - 1)
+}
+
+tni niam() {
+    tni resultado = factorial(5)
+    tnirp(resultado)
+    nruter 0
+}
