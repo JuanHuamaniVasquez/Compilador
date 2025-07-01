@@ -1,5 +1,14 @@
 # Proyecto Final - Compilador
 
+## **Integrantes**  
+- **Hugo Alonso Youzzueff Diaz Chavez**  
+- **Juan José Huamaní Vásquez**  
+- **Melvin Jarred Yabar Carazas**  
+- **Gabriel Frank Krisna Zela Flores**  
+
+## **Docente**  
+- **Vicente Enrique Machaca Arceda**  
+
 Este proyecto es el resultado final para el curso de Compiladores. Consiste en el desarrollo de un compilador que traduce un lenguaje de programación propio a código ensamblador SPIM.
 
 ## Tabla de Contenidos
