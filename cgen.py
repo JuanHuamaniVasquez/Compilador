@@ -39,6 +39,16 @@ def generar_codigo_expresion(nodo, izq=None):
             codigo_spim.append(f"# Cargar valor de variable {nodo.value}")
             codigo_spim.append(f"lw {temp}, {nodo.value}")
             return temp
+        elif nodo.name == "eurt":
+            temp = nuevo_temp()
+            codigo_spim.append(f"# Cargar valor constante 1")
+            codigo_spim.append(f"li {temp}, 1")
+            return temp
+        elif nodo.name == "eslaf":
+            temp = nuevo_temp()
+            codigo_spim.append(f"# Cargar valor constante 0")
+            codigo_spim.append(f"li {temp}, 0")
+            return temp
         else:
             return ""
 
@@ -75,8 +85,9 @@ def generar_codigo_expresion(nodo, izq=None):
 
     if nodo.name == "T":
         izq = generar_codigo_expresion(nodo.children[0])
-        der = generar_codigo_expresion(nodo.children[1], izq)
-        return der if der else izq
+        der = generar_codigo_expresion_recursiva(izq, nodo.children[1]) if len(nodo.children) > 1 else izq
+        return der 
+    
     if nodo.name == "E'":
         if len(nodo.children) == 0:
             return izq  # Nada que hacer
@@ -86,7 +97,7 @@ def generar_codigo_expresion(nodo, izq=None):
         siguiente = generar_codigo_expresion(nodo.children[2]) if len(nodo.children) > 2 else None
 
         temp = nuevo_temp()
-        if op == "+":
+        if op == "+" :
             codigo_spim.append(f"# Operación + entre {izq} y {derecho}")
             codigo_spim.append(f"add {temp}, {izq}, {derecho}")
         elif op == "-" and izq:
@@ -99,8 +110,8 @@ def generar_codigo_expresion(nodo, izq=None):
 
     if nodo.name == "E":
         izq = generar_codigo_expresion(nodo.children[0])
-        der = generar_codigo_expresion(nodo.children[1], izq)
-        return der if der else izq
+        der = generar_codigo_expresion_recursiva(izq, nodo.children[1]) if len(nodo.children) > 1 else izq
+        return der 
     return ""
 
 def generar_codigo_completo(nodo):
@@ -176,8 +187,14 @@ def generar_spim(nodo_raiz, archivo_salida="salida.asm"):
 
     codigo_final = data + "\n\n" + text
 
+    # Eliminar líneas que contienen "None"
+    lineas = codigo_final.splitlines()
+    lineas_limpias = [linea for linea in lineas if "None" not in linea]
+    codigo_limpio = "\n".join(lineas_limpias)
+
     with open(archivo_salida, "w") as f:
-        f.write(codigo_final)
+        f.write(codigo_limpio)
+
 
     print(f"\nCódigo SPIM guardado en '{archivo_salida}'")  
 def asignar_padres(nodo, padre=None):
@@ -185,11 +202,40 @@ def asignar_padres(nodo, padre=None):
     for hijo in nodo.children:
         asignar_padres(hijo, nodo)
 def generar_codigo_expresion_recursiva(izq, nodo):
-    if nodo.name == "T'" or nodo.name == "E'":
-        return generar_codigo_expresion(nodo, izq)
-    return izq
+    if nodo is None or len(nodo.children) == 0:
+        return izq
 
-if __name__ == "__main__":
+    op = nodo.children[0].value
+    derecho = generar_codigo_expresion(nodo.children[1])
+    siguiente = nodo.children[2] if len(nodo.children) > 2 else None
+
+    temp = nuevo_temp()
+    if nodo.name == "T'":  # multiplicación/división
+        if op == "*":
+            codigo_spim.append(f"# Operación * entre {izq} y {derecho}")
+            codigo_spim.append(f"mul {temp}, {izq}, {derecho}")
+        elif op == "/":
+            codigo_spim.append(f"# Operación / entre {izq} y {derecho}")
+            codigo_spim.append(f"div {izq}, {derecho}")
+            codigo_spim.append(f"mflo {temp}")
+    elif nodo.name == "E'":  # suma/resta
+        if op == "+":
+            codigo_spim.append(f"# Operación + entre {izq} y {derecho}")
+            codigo_spim.append(f"add {temp}, {izq}, {derecho}")
+        elif op == "-":
+            codigo_spim.append(f"# Operación - entre {izq} y {derecho}")
+            codigo_spim.append(f"sub {temp}, {izq}, {derecho}")
+    else:
+        # Nodo inesperado, retornar acumulado sin cambios
+        return izq
+
+    if siguiente:
+        return generar_codigo_expresion_recursiva(temp, siguiente)
+    else:
+        return temp
+
+
+'''if __name__ == "__main__":
     raiz = cargar_arbol()
     asignar_padres(raiz)
-    generar_spim(raiz)
+    generar_spim(raiz)'''

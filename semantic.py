@@ -158,7 +158,7 @@ def verificar_identificadores(nodo, tabla, scope="global", visitados=None):
     if nodo.name.startswith("id"):
         nombre = nodo.value.split("(")[0] if "(" in nodo.value else nodo.value
         if not esta_en_tabla(nombre, scope, tabla):
-            print(f" Error: Identificador '{nombre}' no declarado en ámbito '{scope}'")
+            raise NameError(f" Error: Identificador '{nombre}' no declarado en ámbito '{scope}'")
 
     # Si entramos a una función, cambiar el scope
     if nodo.name == "VarDecl":
@@ -193,7 +193,7 @@ def verificar_redeclaraciones(tabla):
     for simbolo in tabla:
         clave = (simbolo.name, simbolo.scope)
         if clave in vistos:
-            print(f" Error: '{simbolo.name}' redeclarado en ámbito '{simbolo.scope}'")
+            raise SyntaxError(f" Error: '{simbolo.name}' redeclarado en ámbito '{simbolo.scope}'")
         else:
             vistos.add(clave)
 
@@ -261,7 +261,7 @@ def verificar_asignacion_var(nodo_vardecl, tipo_declarado, nombre_var, tabla, sc
                 tipo_expr = inferir_tipo(e_nodo, tabla, scope)
                 #print(f" Tipo inferido para asignación a '{nombre_var}': {tipo_expr}")
                 if not es_asignacion_valida(tipo_declarado, tipo_expr):
-                    print(f" ERROR: No se puede asignar '{tipo_expr}' a variable '{nombre_var}' de tipo '{tipo_declarado}'")
+                    raise TypeError(f" ERROR: No se puede asignar '{tipo_expr}' a variable '{nombre_var}' de tipo '{tipo_declarado}'")
                 else:
                     print(f" Asignación válida para variable '{nombre_var}'")
                 break
@@ -336,16 +336,16 @@ def tipo_binario(t1, t2):
 #  Main
 # =======================
 
-if __name__ == "__main__":
+'''if __name__ == "__main__":
     raiz = cargar_arbol()
     print("\n ANALIZANDO...")
     tabla = []
     construir_tabla_simbolos(raiz, tabla)
     guardar_tabla(tabla)
     print(f"\n Tabla de símbolos generada con {len(tabla)} símbolos.")
-    #imprimir_tabla_simbolos(tabla, solo_global=False)
+    imprimir_tabla_simbolos(tabla, solo_global=False)
     print("\n Verificando identificadores usados...")
     verificar_identificadores(raiz, tabla)
     verificar_redeclaraciones(tabla)
-    #imprimir_tabla_simbolos(tabla, solo_global=True)
-    #imprimir_arbol(raiz)
+    imprimir_tabla_simbolos(tabla, solo_global=True)
+    #imprimir_arbol(raiz)'''

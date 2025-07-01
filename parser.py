@@ -53,8 +53,7 @@ def predictive_parser(input_tokens, csv_file="producciones.csv"):
                 print("terminal")
                 pointer += 1
             else:
-                print("ERROR: desajuste de terminal")
-                break
+                raise ValueError("Desajuste de terminal: se esperaba otro token.")
         elif top in parsing_table:
             rule = parsing_table[top].get(current_token_type)
             if rule is not None:
@@ -65,11 +64,11 @@ def predictive_parser(input_tokens, csv_file="producciones.csv"):
                 for child_node, symbol in zip(reversed(children_nodes), reversed(rule)):
                     stack.append((child_node, symbol))
             else:
-                print("ERROR: no se encontró regla")
-                break
+                raise ValueError("No se encontró regla")
+                
         else:
-            print(f"ERROR: símbolo desconocido {top}")
-            break
+           raise ValueError(f"Símbolo desconocido {top}")
+            
 
     return root
 
