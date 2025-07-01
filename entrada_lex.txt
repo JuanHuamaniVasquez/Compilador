@@ -1,9 +1,6 @@
-taolf y = "otro texto"       // string no puede ir a float
-tni z = eslaf + "cadena"     // bool + string inválido
-gnirts s = 5 + 2              // int a string no permitido
-tni w = eurt + "si"           // bool + string inválido
-loob flag = 1.5                // float a bool inválido
-tni r = "1" + "2"              // suma de strings no válida para int
-gnirts nombre = eurt + "ok"    // bool + string inválido
-loob q = "eurt"                // string no puede ser bool
-taolf m = "0.1"                // string no puede ser float
+
+tni c = 5 + 2 * 3     // Esperado: 5 + (2 * 3) = 11
+tni d = 8 / 4 + 6     // Esperado: (8 / 4) + 6 = 8
+tni e = 2 + 3 * 4 - 5     // 2 + (3*4) - 5 = 9
+tni f = 9 / 3 + 2 * 2     // (9/3) + (2*2) = 7
+tni g = c + d             // 19
