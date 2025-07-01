@@ -22,7 +22,8 @@ def buscar_nodo(nodo, nombre):
             return resultado
     return None
 
-def generar_codigo_expresion(nodo):
+def generar_codigo_expresion(nodo, izq=None):
+
     if nodo is None:
         return ""
 
@@ -54,43 +55,52 @@ def generar_codigo_expresion(nodo):
 
     if nodo.name == "T'":
         if len(nodo.children) == 0:
-            return ""
+            return izq  # Nada que hacer
+
         op = nodo.children[0].value
-        izquierdo = generar_codigo_expresion(nodo.parent.children[0])  # T viene antes de T'
         derecho = generar_codigo_expresion(nodo.children[1])
+        siguiente = generar_codigo_expresion(nodo.children[2]) if len(nodo.children) > 2 else None
+
         temp = nuevo_temp()
-        codigo_spim.append(f"# Operación {op} entre {izquierdo} y {derecho}")
         if op == "*":
-            codigo_spim.append(f"mul {temp}, {izquierdo}, {derecho}")
+            codigo_spim.append(f"# Operación * entre {izq} y {derecho}")
+            codigo_spim.append(f"mul {temp}, {izq}, {derecho}")
         elif op == "/":
-            codigo_spim.append(f"div {izquierdo}, {derecho}")
+            codigo_spim.append(f"# Operación / entre {izq} y {derecho}")
+            codigo_spim.append(f"div {izq}, {derecho}")
             codigo_spim.append(f"mflo {temp}")
+        if siguiente:
+            return generar_codigo_expresion_recursiva(temp, nodo.children[2])
         return temp
 
     if nodo.name == "T":
         izq = generar_codigo_expresion(nodo.children[0])
-        der = generar_codigo_expresion(nodo.children[1]) if len(nodo.children) > 1 else ""
+        der = generar_codigo_expresion(nodo.children[1], izq)
         return der if der else izq
-
     if nodo.name == "E'":
         if len(nodo.children) == 0:
-            return ""
+            return izq  # Nada que hacer
+
         op = nodo.children[0].value
-        izquierdo = generar_codigo_expresion(nodo.parent.children[0])  # E viene antes de E'
         derecho = generar_codigo_expresion(nodo.children[1])
+        siguiente = generar_codigo_expresion(nodo.children[2]) if len(nodo.children) > 2 else None
+
         temp = nuevo_temp()
-        codigo_spim.append(f"# Operación {op} entre {izquierdo} y {derecho}")
         if op == "+":
-            codigo_spim.append(f"add {temp}, {izquierdo}, {derecho}")
-        elif op == "-":
-            codigo_spim.append(f"sub {temp}, {izquierdo}, {derecho}")
+            codigo_spim.append(f"# Operación + entre {izq} y {derecho}")
+            codigo_spim.append(f"add {temp}, {izq}, {derecho}")
+        elif op == "-" and izq:
+            codigo_spim.append(f"# Operación - entre {izq} y {derecho}")
+            codigo_spim.append(f"sub {temp}, {izq}, {derecho}")
+        if siguiente:
+            return generar_codigo_expresion_recursiva(temp, nodo.children[2])
         return temp
+
 
     if nodo.name == "E":
         izq = generar_codigo_expresion(nodo.children[0])
-        der = generar_codigo_expresion(nodo.children[1]) if len(nodo.children) > 1 else ""
+        der = generar_codigo_expresion(nodo.children[1], izq)
         return der if der else izq
-
     return ""
 
 def generar_codigo_completo(nodo):
@@ -147,6 +157,10 @@ def asignar_padres(nodo, padre=None):
     nodo.parent = padre
     for hijo in nodo.children:
         asignar_padres(hijo, nodo)
+def generar_codigo_expresion_recursiva(izq, nodo):
+    if nodo.name == "T'" or nodo.name == "E'":
+        return generar_codigo_expresion(nodo, izq)
+    return izq
 
 if __name__ == "__main__":
     raiz = cargar_arbol()
