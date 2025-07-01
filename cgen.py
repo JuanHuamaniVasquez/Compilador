@@ -146,7 +146,34 @@ def generar_spim(nodo_raiz, archivo_salida="salida.asm"):
     generar_codigo_completo(nodo_raiz)
 
     data = ".data\n" + "\n".join([f"{var}: .word 0" for var in sorted(variables)])
-    text = ".text\nmain:\n" + "\n".join(["    " + instr for instr in codigo_spim]) + "\n    li $v0, 10\n    syscall"
+    cuerpo = ["    " + instr for instr in codigo_spim]
+
+    # Agregar impresión de valores de todas las variables
+    for var in sorted([v for v in variables if isinstance(v, str)]):
+        cuerpo.append(f'    # Imprimir variable {var}')
+        cuerpo.append(f'    li $v0, 4')
+        cuerpo.append(f'    la $a0, msg_{var}')
+        cuerpo.append('    syscall')
+        cuerpo.append(f'    lw $a0, {var}')
+        cuerpo.append(f'    li $v0, 1')
+        cuerpo.append('    syscall')
+        cuerpo.append(f'    li $v0, 4')
+        cuerpo.append(f'    la $a0, newline')
+        cuerpo.append('    syscall')
+
+    cuerpo.append("    li $v0, 10")
+    cuerpo.append("    syscall")
+
+    # Mensajes auxiliares
+    mensajes = [f'{label}: .asciiz "{contenido}"' for v in variables if isinstance(v, tuple) for (label, contenido) in [v]]
+    mensajes += [f'msg_{var}: .asciiz "{var} = "' for var in sorted(variables) if isinstance(var, str)]
+    mensajes.append('newline: .asciiz "\\n"')
+
+    vars_normales = [f'{var}: .word 0' for var in sorted(variables) if isinstance(var, str)]
+    data = ".data\n" + "\n".join(vars_normales + mensajes)
+    text = ".text\nmain:\n" + "\n".join(cuerpo)
+
+
     codigo_final = data + "\n\n" + text
 
     with open(archivo_salida, "w") as f:
